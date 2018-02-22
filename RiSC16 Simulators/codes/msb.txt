@@ -1,0 +1,8 @@
+@2
+movi 7,0
+movi 2,0x8000
+nand 3, 1, 2
+nand 3, 3, 3
+beq 3, 0, 1
+addi 7, 7, 1
+halt

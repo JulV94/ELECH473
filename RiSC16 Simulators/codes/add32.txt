@@ -1,0 +1,36 @@
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		add 4,4,6	// r4=r4+r6
+		sw 4,0,0	// store r4 in mem0
+		movi 1,0x8000	// create mask for MSB
+		add 2,3,5	// r2=r3+r5
+		nand 4,2,1
+		nand 4,4,4	// MSB of r2
+		beq 4,0,endmsb2	// put 1 if r4 is not 0
+		movi 4,1
+endmsb2:	nand 6,3,1
+		nand 6,6,6	// MSB of r3
+		beq 6,0,endmsb3	// put 1 if r6 is not 0
+		movi 6,1
+endmsb3:	nand 7,5,1
+		nand 7,7,7	// MSB of r5
+		beq 7,0,endmsb5	// put 1 if r7 is not 0
+		movi 7,1
+endmsb5:	add 6,6,7	// r6=r6+r7
+		addi 6,6,-1	// r6=r6-1
+		beq 6,4,iscarry
+		addi 6,6,-1	// r6=r6-1
+		beq 6,4,iscarry
+		movi 4,0	// no carry if we come here
+		beq 0,0,end1	// jump to the end
+iscarry:	movi 4,1	// carry if we come here
+end1:		addi 3,2,0	// store result (r2) in r3
+		lw 2,0,0	// load mem0 in r2
+		add 4,4,2	// add r2 to carry
+		halt

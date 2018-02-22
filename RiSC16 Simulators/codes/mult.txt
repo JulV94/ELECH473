@@ -1,0 +1,7 @@
+		nop
+		nop
+loop:	beq 2,0,end  // for i=nbr2
+		add 3,3,1    // result+=nbr1
+		addi 2,2,-1  // i--
+		beq 0,0,loop // end for
+end:	halt

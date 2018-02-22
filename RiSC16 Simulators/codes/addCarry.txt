@@ -1,0 +1,27 @@
+		nop
+		nop
+		nop
+		nop
+		add 3,2,1	// r3=r1+r2
+		movi 5,0x8000	// create mask for MSB
+		nand 4,3,5
+		nand 4,4,4	// MSB of r3
+		beq 4,0,endmsb3	// put 1 if r4 is not 0
+		movi 4,1
+endmsb3:	nand 6,1,5
+		nand 6,6,6	// MSB of r1
+		beq 6,0,endmsb1	// put 1 if r6 is not 0
+		movi 6,1
+endmsb1:	nand 7,2,5
+		nand 7,7,7	// MSB of r2
+		beq 7,0,endmsb2	// put 1 if r7 is not 0
+		movi 7,1
+endmsb2:	add 6,6,7	// r6=r6+r7
+		addi 6,6,-1	// r6=r6-1
+		beq 6,4,iscarry
+		addi 6,6,-1	// r6=r6-1
+		beq 6,4,iscarry
+		movi 4,0	// no carry if we come here
+		beq 0,0,end	// jump to the end
+iscarry:	movi 4,1	// carry if we come here
+end:		halt

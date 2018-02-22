@@ -1,0 +1,56 @@
+Disassembly Listing for Simul_dsPIC1
+Generated From:
+/home/yallard/Work/ELECH410/Simul_dsPIC1/Simul_dsPIC1.X/dist/default/debug/Simul_dsPIC1.X.debug.elf
+19 mars 2013 14:49:59
+
+---  /home/yallard/Work/ELECH410/Simul_dsPIC1/initvar.c  ------------------------------------------------
+1:                 #include <p33FJ256GP710.h>
+2:                 
+3:                 
+4:                 
+5:                 int main (void)
+6:                 {
+000294  FA001E     LNK #0x1E
+7:                 char a = -76;
+000296  B3CB40     MOV #0xB4, W0
+000298  784F00     MOV.B W0, [W14]
+8:                 unsigned char b = 120;
+00029A  B3C780     MOV #0x78, W0
+00029C  984710     MOV.B W0, [W14+1]
+9:                 int c = -27280;
+00029E  295700     MOV #0x9570, W0
+0002A0  980710     MOV W0, [W14+2]
+10:                unsigned int d = 55000;
+0002A2  2D6D80     MOV #0xD6D8, W0
+0002A4  980720     MOV W0, [W14+4]
+11:                long e = -2000000;
+0002A6  27B800     MOV #0x7B80, W0
+0002A8  2FFE11     MOV #0xFFE1, W1
+0002AA  980730     MOV W0, [W14+6]
+0002AC  980741     MOV W1, [W14+8]
+12:                unsigned long f = 2000000;
+0002AE  284800     MOV #0x8480, W0
+0002B0  2001E1     MOV #0x1E, W1
+0002B2  980750     MOV W0, [W14+10]
+0002B4  980761     MOV W1, [W14+12]
+13:                long long g = 8000000000000001; 
+0002B6  200010     MOV #0x1, W0
+0002B8  226341     MOV #0x2634, W1
+0002BA  26BF52     MOV #0x6BF5, W2
+0002BC  2001C3     MOV #0x1C, W3
+0002BE  980770     MOV W0, [W14+14]
+0002C0  980F01     MOV W1, [W14+16]
+0002C2  980F12     MOV W2, [W14+18]
+0002C4  980F23     MOV W3, [W14+20]
+14:                unsigned long long h = 800000000000002;
+0002C6  200020     MOV #0x2, W0
+0002C8  283D21     MOV #0x83D2, W1
+0002CA  2D7982     MOV #0xD798, W2
+0002CC  200023     MOV #0x2, W3
+0002CE  980F30     MOV W0, [W14+22]
+0002D0  980F41     MOV W1, [W14+24]
+0002D2  980F52     MOV W2, [W14+26]
+0002D4  980F63     MOV W3, [W14+28]
+15:                }
+0002D6  FA8000     ULNK
+0002D8  060000     RETURN

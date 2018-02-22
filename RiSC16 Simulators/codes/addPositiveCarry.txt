@@ -1,0 +1,15 @@
+		nop
+		nop
+		nop
+		nop
+		add 3,2,1      // r3=r1+r2
+		addi 4,2,0     // copy r2 in r4
+		nand 4,4,4
+		addi 4,4,1     // invert r4 -> -r2
+		add 4,4,3      // r4=r3-r2
+		movi 5,0x8000  // create mask for MSB (extract the sign of r4)
+		nand 4,4,5
+		nand 4,4,4     // apply mask on r4
+		beq 4,0,end    // if 0 -> ok no carry
+		movi 4,1       // else set r4=1
+end:	halt
