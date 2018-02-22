@@ -1,0 +1,44 @@
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+add:		add 4,4,6 	//r4=r4+r6
+add1:		add 2,3,5	//r2=r3+r5
+mask:		movi 1,0x8000 	//creqte mask for msb
+msb1:		nand 7,3,1	
+		nand 7,7,7	//and 
+		beq 7,0,end1	// compqre
+		movi 7,1	//msb operqnd 1
+end1:		beq 7,0,zero1	//if 7 zero jump else if 1 next line
+
+msb2:		nand 7,5,1	
+		nand 7,7,7	//and 
+		beq 7,0,end2	// compqre
+		movi 7,1	//msb operqnd 2			
+end2:		beq 7,0,msbresult	//if 7 zero jump else if 1 next line; both are 1 need carry
+		beq 0,0,carry	//jump to carry
+
+msbresult:	nand 7,2,1	//msb of result
+		nand 7,7,7	//and 
+		beq 7,0, end3	//compqre
+		movi 7,1	//msb result
+end3:		beq 7,0,carry	//if 7 zero jump else 1 next line; if 1 no carry
+		beq 0,0,nocarry	// jump to no carry
+
+zero1: 		nand 7,5,1	//msb operand 2
+		nand 7,7,7	//and 
+		beq 7,0,end4	// compqre
+		movi 7,1	//msb operqnd 2
+
+end4:		beq 7,0,nocarry	//if 7 zero jump else if 1 next line; check result
+	
+		beq 0,0,msbresult	//msb of result
+	
+carry: 		addi 4,4,1	//add carry
+nocarry:	addi 3,2,0	//saves the finql result
+		halt
+	

@@ -1,0 +1,47 @@
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+add:	add 3,2,1 //r3=r2+r1
+mask:	movi 5,0x8000 //creqte mask for msb
+msb1:	nand 4,1,5	
+	nand 4,4,4	//and 
+	beq 4,0,end1	// compqre
+	movi 4,1	//msb operqnd 1
+end1:	beq 4,0,zero1	//if 4 zero jump else if 1 next line
+msb2:	nand 4,2,5	
+	nand 4,4,4	//and 
+	beq 4,0,end2	// compqre
+	movi 4,1	//msb operqnd 2			
+end2:	beq 4,0,zero2	//if 4 zero jump else if 1 next line; both are 1 need carry
+	movi 4,1	//carry
+	halt		//END1
+zero2:	nand 4,3,5	//msb of result
+	nand 4,4,4	//and 
+	beq 4,0, end3	//compqre
+	movi 4,1	//msb result
+end3:	beq 4,0,zero3	//if 4 zero jump else 1 next line; if 1 no carry
+	movi 4,0	//no carry
+	halt		//END2
+zero3:	movi 4,1	//carry 
+	halt		//END3
+zero1: 	nand 4,2,5	
+	nand 4,4,4	//and 
+	beq 4,0,end4	// compqre
+	movi 4,1	//msb operqnd 2
+end4:	beq 4,0,zero4	//if 4 zero jump else if 1 next line; check result
+	nand 4,3,5	//msb of result
+	nand 4,4,4	//and 
+	beq 4,0, end5	//compqre
+	movi 4,1	//msb result
+end5:	beq 4,0,zero5	//if 4 zero jump else 1 next line; if 1 no carry
+	movi 4,0	//no carry
+	halt		//END4
+zero5:	movi 4,1	//carry 
+	halt		//END5
+zero4:	movi 4,0 	//END6
+	halt
