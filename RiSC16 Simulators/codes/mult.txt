@@ -2,10 +2,6 @@
 		nop
 		nop
 		nop
-		nop
-		nop
-		nop
-		nop
 		addi 7,7,16			// init loop counter at 16
 		addi 6,6,1			// init mask for multiplication
 loop:		beq 7,0,endloop
@@ -52,7 +48,7 @@ shifting:		add 6,6,6		// shift mask << 1
 			nand 7,7,7		// extract the msb
 			beq 7,0,1		// is there a carry?
 			addi 5,5,1		// add carry in msp op1
-			addi 1,1,1		// shift lsp op1 << 1
+			add 1,1,1		// shift lsp op1 << 1
 			lw 6,0,1		// load mask at mem1
 			lw 7,0,0		// load counter from mem0
 			addi 7,7,-1		// decrement for the loop
