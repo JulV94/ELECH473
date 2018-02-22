@@ -28,7 +28,6 @@ msbresult:	nand 7,2,1	//msb of result
 zero: 		nand 7,5,1	//msb operand 2
 		nand 7,7,7	//and 
 		beq 7,0,nocarry	// compqre //if 7 zero jump else if 1 next line; check result
-
 	
 		beq 0,0,msbresult	//msb of result
 	
