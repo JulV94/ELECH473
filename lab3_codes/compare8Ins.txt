@@ -1,0 +1,30 @@
+		lui 4,512		// Create the mask 0x8000
+		nand 5,1,4
+		nand 5,5,5		// Extract the msb of op1
+		nand 6,2,4
+		nand 6,6,6		// Extract the msb of op2
+		beq 5,0,pos1
+		beq 6,0,neg1_pos2
+		addi 1,1,-1	// neg1 neg2 undetermined
+		addi 2,2,-1
+		movi 7,0xffff	// mask to invert bits
+		nand 1,1,7
+		nand 7,2,7		// Invert the bits (and Put op2 in r7 - buffer)
+		addi 2,1,0		// Put op1 in r2
+		addi 1,7,0		// Put op2 in r1
+		beq 0,0,pos1_pos2	// Go back in the pos1 pos2 case
+pos1:		beq 6,0,pos1_pos2
+		beq 0,0,false_case	// pos1 neg2 false
+neg1_pos2:		beq 0,0,true_case	// neg1 pos2 true
+pos1_pos2:		beq 1,2,true_case	// op1 == op2
+loop:			add 1,1,1		// pos1 pos2 undetermined - shift op1
+			add 2,2,2		// shift op2
+			nand 5,1,4
+			nand 5,5,5		// Extract the msb of op1
+			nand 6,2,4
+			nand 6,6,6		// Extract the msb of op2
+			beq 5,6,loop	// loop again on the next bit
+			beq 5,0,true_case	// op1 < op2
+			beq 0,0,false_case	// op1 > op2
+true_case:		addi 3,3,1	
+false_case:	halt

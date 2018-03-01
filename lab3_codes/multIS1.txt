@@ -1,0 +1,25 @@
+		nop
+		nop
+		nop
+		nop
+		addi 7,7,16			// init loop counter at 16
+		addi 6,6,1				// init mask for multiplication
+loop:		beq 7,0,endloop
+			sw 7,0,0			// save counter at mem0
+			nand 7,2,6
+			nand 7,7,7			// apply mask on r2 -> r7
+			beq 7,0,shifting		// check if it's 0 or 1
+				add 3,3,1,addcarry	// add lsp
+				beq 0,0,addnocarry
+addcarry:				addi 4,4,1
+addnocarry:			add 4,4,5		// add msp
+
+shifting:			add 6,6,6			// shift mask << 1
+				add 5,5,5		// shift msp op1 << 1
+				shl 1,1,1,	shcarry	// shift lsp op1 << 1
+				beq 0,0,shnocarry
+shcarry:				addi 5,5,1	
+shnocarry:			lw 7,0,0			// load counter from mem0
+			addi 7,7,-1		// decrement for the loop
+			beq 0,0,loop
+endloop:		halt

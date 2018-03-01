@@ -2,9 +2,10 @@
 		nop
 		nop
 		nop
-		addi 7,7,16				// init loop counter at 16
+		movi 7,0xFFFF				// init loop counter (shift counter)
 		addi 6,6,1				// init mask for multiplication
 loop:		beq 7,0,endloop
+			add 7,7,7			// shift << 1 the counter
 			sw 7,0,0			// save counter at mem0
 			nand 7,2,6
 			nand 7,7,7			// apply mask on r2 -> r7
@@ -51,6 +52,5 @@ shifting:		add 6,6,6			// shift mask << 1
 				add 1,1,1		// shift lsp op1 << 1
 			lw 6,0,1			// load mask at mem1
 			lw 7,0,0			// load counter from mem0
-			addi 7,7,-1			// decrement for the loop
 			beq 0,0,loop
 endloop:	halt
