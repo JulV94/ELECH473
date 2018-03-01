@@ -5,6 +5,7 @@
 		nand 6,6,6		// Extract the msb of op2
 		beq 5,0,pos1
 		beq 6,0,neg1_pos2
+		beq 1,2,true_case	// op1 == op2
 		beq 1,4,true_case	// op1 is the lowest possible number
 		beq 2,4,false_case	// op2 is the lowest possible number (case where op1=op2=-32768 will be handled at pos1_pos2 instruction)
 		addi 1,1,-1	// neg1 neg2 undetermined
@@ -14,7 +15,7 @@
 		nand 7,2,7		// Invert the bits (and Put op2 in r7 - buffer)
 		addi 2,1,0		// Put op1 in r2
 		addi 1,7,0		// Put op2 in r1
-		beq 0,0,pos1_pos2	// Go back in the pos1 pos2 case
+		beq 0,0,loop	// Go to the loop
 pos1:		beq 6,0,pos1_pos2
 		beq 0,0,false_case	// pos1 neg2 false
 neg1_pos2:		beq 0,0,true_case	// neg1 pos2 true
