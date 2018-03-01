@@ -1,10 +1,12 @@
-		lui 4,512		// Create the mask 0x8000
+		lui 4,512		// Create the mask 0x8000 (or also -32768 which can cause overflow when doing -1)
 		nand 5,1,4
 		nand 5,5,5		// Extract the msb of op1
 		nand 6,2,4
 		nand 6,6,6		// Extract the msb of op2
 		beq 5,0,pos1
 		beq 6,0,neg1_pos2
+		beq 1,4,true_case	// op1 is the lowest possible number
+		beq 2,4,false_case	// op2 is the lowest possible number (case where op1=op2=-32768 will be handled at pos1_pos2 instruction)
 		addi 1,1,-1	// neg1 neg2 undetermined
 		addi 2,2,-1
 		movi 7,0xffff	// mask to invert bits
