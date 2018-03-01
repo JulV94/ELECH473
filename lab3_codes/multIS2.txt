@@ -1,0 +1,7 @@
+		nop
+		nop
+		nop
+		nop
+		mul 5,1,2
+		addi 3,5,0
+		halt
