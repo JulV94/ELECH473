@@ -1,37 +1,37 @@
-		nop
-		nop
-		nop
-		nop
-		nop
-		nop
-		nop
-		nop
-add:		add 4,4,6 	//r4=r4+r6
-add1:		add 2,3,5	//r2=r3+r5
-mask:		movi 1,0x8000 	//creqte mask for msb
+			nop
+			nop
+			nop
+			nop
+			nop
+			nop
+			nop
+			nop
+add:		add 4,4,6 			//r4=r4+r6 add most significant part
+add1:		add 2,3,5			//r2=r3+r5 add least significant part
+mask:		movi 1,0x8000 		//create a most for msb 32 bits add
 
-		nand 7,3,1	//msb1
-		nand 7,7,7	//and 
-		beq 7,0,zero	// compqre //if 7 zero jump else if 1 next line
+			nand 7,3,1			//msb1
+			nand 7,7,7			//extract msb of op1 lsp 
+			beq 7,0,zero		// see if msb of op1 is 1 or 0
 
-		nand 7,5,1	//msb2
-		nand 7,7,7	//and 
-		beq 7,0,msbresult	// compqre //if 7 zero jump else if 1 next line; both are 1 need carry
-		beq 0,0,carry	//jump to carry
+			nand 7,5,1			//msb2
+			nand 7,7,7			//extract msb of op2 lsp
+			beq 7,0,msbresult	//see if msb of op2 is 1 or 0; if 1 need carry, if 0 need to check msbresult
+			beq 0,0,carry		//both msb 1, jump to carry
 		
-msbresult:	nand 7,2,1	//msb of result
-		nand 7,7,7	//and 
-		beq 7,0, carry	//compqre //if 7 zero jump else 1 next line; if 1 no carry
-		beq 0,0,nocarry	// jump to no carry
+msbresult:	nand 7,2,1			//msb of result
+			nand 7,7,7			//extract msb of result lsp
+			beq 7,0, carry		//determine if needs to carry or not
+			beq 0,0,nocarry		//jump to no carry
 
 
-zero: 		nand 7,5,1	//msb operand 2
-		nand 7,7,7	//and 
-		beq 7,0,nocarry	// compqre //if 7 zero jump else if 1 next line; check result
+zero: 		nand 7,5,1			//msb operand 2
+			nand 7,7,7			//extract msb of op2 lsp
+			beq 7,0,nocarry		//see if msb of op 2 is 1 or 0; if 0 no carry, if 1 need to check msbresult
 	
-		beq 0,0,msbresult	//msb of result
+			beq 0,0,msbresult	//jump to msb of result
 	
-carry: 		addi 4,4,1	//add carry
-nocarry:	addi 3,2,0	//saves the finql result
-		halt
+carry: 		addi 4,4,1			//add carry least significant part
+nocarry:	addi 3,2,0			//saves the final result
+			halt
 	
