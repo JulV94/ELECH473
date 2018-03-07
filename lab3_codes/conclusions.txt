@@ -5,8 +5,8 @@ We tested the biggest and smallest numbers possible in all combinations possible
 The combinations of numbers are:
 - Operand 1 positive and Operand 2 positive
 - Operand 1 positive and Operand 2 negative
-- Operand 1 negative and Operand 1 positive
-- Operand 1 negative and Operand 1 negative
+- Operand 1 negative and Operand 2 positive
+- Operand 1 negative and Operand 2 negative
 Four each of the four possible combination we tested with operand 1 lower than operand 2 and also with operand 1 greater than operand 2, in order to have all the possible combinations. We also tested when the operands were equal in both cases, for positive numbers and negative numbers.
 We tested for the case for special case of -32768 in all the combinations since our code converts the number to the absolute value to compare and there is no equivalence in positive to this number in signed logic.
 -------------------------
