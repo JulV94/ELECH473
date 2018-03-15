@@ -1,21 +1,31 @@
-Multiplications (Q3) :
-----------------------
-SI0 : 51 instructions - execution between 304 and 592 instructions
+Choice of test vectors (Q1):
+-------------------------------------
+The operation chosen was <=.
+We tested the biggest and smallest numbers possible in all combinations possible, considering both positive and negative numbers. 
+The combinations of numbers are:
+- Operand 1 positive and Operand 2 positive
+- Operand 1 positive and Operand 2 negative
+- Operand 1 negative and Operand 2 positive
+- Operand 1 negative and Operand 2 negative
+Four each of the four possible combination we tested with operand 1 lower than operand 2 and also with operand 1 greater than operand 2, in order to have all the possible combinations. We also tested when the operands were equal in both cases, for positive numbers and negative numbers.
+We tested for the case for special case of -32768 in all the combinations since our code converts the number to the absolute value to compare and there is no equivalence in positive to this number in signed logic.
+-------------------------
+
+Comparison (Q2):
+-------------------------
+We can see that SI2 has a dedicated instruction for the comparison of the operands, so the code is obviously much shorter than with the SI1 set of instructions. 
+The code is 3 instructions long for SI2 and 30 for SI1. 
+SI1 code is also made with a loop inside, while the S12 just does the comparison directly. 
+The execution of SI1 code will be much longer in all possible cases.
+----------------------------
+
+Multiplications (Q3):
+----------------------------
+SI0 : 51 instructions – execution between 304 and 592 instructions
 SI1 : 28 instructions - execution between 264 and 312 instructions
 SI2 : 6 instructions - execution is 6 instructions
 
-Numbers are given with the 4 nop at the begining. We see that a more complete set of instructions can reduce the number of instructions needed to perform a task leading in a faster execution since the CPI stays the same in the RiSC architecture. We can also see that the algorithm is less dependent of the inputs for execution time since there is less instructions and less branching (even no branching for the SI2 case)
-
-Comparison (Q2) :
------------------
-We see that SI2 has a dedicated instruction for comparison so the code is obviously much shorter. The code is 3 instructions long for SI2 and 30 for SI1. SI1 code is also made with a loop inside. The execution of SI1 code will be much longer in any case.
-
-Choice of test vectors (Q1) :
------------------------------
-We tested the big and small numbers in all combinations possible. Combinations are :
-- positive positive
-- positive negative
-- negative positive
-- negative negative
-Then we tested switching operands 1 and 2 and some vectors where operand 1 == operand 2
+Numbers are given with the 4 nop at the beginning. 
+We see that a more complete set of instructions can reduce the number of instructions needed to perform a task leading in a faster execution since the CPI stays the same in the RiSC architecture. 
+We can also see that the algorithm is less dependent of the inputs for execution time since there is less instructions and less branching (even no branching for the SI2 case).
 
