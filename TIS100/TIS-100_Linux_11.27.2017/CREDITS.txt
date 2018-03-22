@@ -1,0 +1,23 @@
+The following people contributed to TIS-100:
+
+DESIGN
+Zach Barth
+Keith Holman
+
+PROGRAMMING
+Zach Barth
+
+WRITING (NARRATIVE)
+Matthew Burns
+
+WRITING (TECHNICAL)
+Keith Holman
+
+SOUND
+Matthew Burns
+
+ILLUSTRATION
+Kyle Steed
+
+VANGUARD PLAYTESTING
+Keith Holman
