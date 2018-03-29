@@ -29,8 +29,13 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-march=corei7-avx" />
 			<Add option="-Wall" />
+			<Add option="-m64" />
 		</Compiler>
+		<Linker>
+			<Add option="-m64" />
+		</Linker>
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>

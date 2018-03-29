@@ -5,23 +5,23 @@
 
 #define W 1024
 #define H 1024
-#define TEST_COUNT 1000
+#define TEST_COUNT 10
 #define WINDOW_SIZE 3
-#define BORDER_SIZE (WINDOW_SIZE/2)-1
+#define BORDER_SIZE (WINDOW_SIZE-1)/2
 
 void c_min_max(unsigned char *src, unsigned char *dst)
 {
     int i, j, k, l, min_buffer, max_buffer;
 
-    for (i=BORDER_SIZE; i<W-BORDER_SIZE; i++)
+    for (i=BORDER_SIZE; i<(W-BORDER_SIZE); i++)
     {
-        for (j=BORDER_SIZE; j<H-BORDER_SIZE;j++)
+        for (j=BORDER_SIZE; j<(H-BORDER_SIZE);j++)
         {
             min_buffer = 255;
             max_buffer = 0;
-            for (k=i-BORDER_SIZE;k<=i+BORDER_SIZE;k++)
+            for (k=i-BORDER_SIZE;k<=(i+BORDER_SIZE);k++)
             {
-                for (l=j-BORDER_SIZE;l<=j+BORDER_SIZE;l++)
+                for (l=j-BORDER_SIZE;l<=(j+BORDER_SIZE);l++)
                 {
                     if (src[W*k+l] > max_buffer)
                     {
@@ -40,29 +40,45 @@ void c_min_max(unsigned char *src, unsigned char *dst)
 
 void simd_min_max(unsigned char *src, unsigned char *dst)
 {
-    long i = W*H/16;
-//    char threshold[16];
-//    memset(threshold, THRESHOLD, 16*sizeof(char));
-//
-//    asm(
-//        "mov %[src], %%rsi\n"
-//        "mov %[i], %%rcx\n"
-//        "mov %[dst], %%rdi\n"
-//        "mov %[threshold], %%rax\n"
-//        "movapd (%%rax), %%xmm7\n"
-//        "l1:\n"
-//        "movapd (%%rsi), %%xmm0\n"
-//        "pminub %%xmm7, %%xmm0\n"
-//        "pcmpeqb %%xmm7, %%xmm0\n"
-//        "movapd %%xmm0, (%%rdi)\n"
-//        "add $16, %%rdi\n"
-//        "add $16, %%rsi\n"
-//        "sub $1, %%rcx\n"
-//        "jnz l1\n"
-//        : [dst]"=m" (dst)     // outputs
-//        : [src]"g" (src), [i]"g" (i), [threshold]"g" (threshold) // inputs
-//        : "rsi", "rcx", "rdi", "rax", "xmm0", "xmm7"  // clobbers
-//        );
+    long i = W*(H-2*BORDER_SIZE)/14;
+
+    asm(
+        "mov %[src], %%rsi\n"
+        "mov %[i], %%rcx\n"
+        "mov %[dst], %%rdi\n"
+        "l1:\n"
+        "movdqu (%%rsi), %%xmm0\n"  // Line 1
+        "movdqu 1024(%%rsi), %%xmm1\n"  // Line 2
+        "movdqu 2048(%%rsi), %%xmm2\n"  // Line 3
+        "pmaxub %%xmm1, %%xmm0\n"
+        "pmaxub %%xmm2, %%xmm0\n"     // Compare lines vertically
+        "movdqu %%xmm0, %%xmm6\n"
+        "movdqu %%xmm0, %%xmm7\n"     // Copy the result
+        "psrldq $1, %%xmm6\n"
+        "psrldq $2, %%xmm7\n"         // Shift the register
+        "pmaxub %%xmm7, %%xmm6\n"
+        "pmaxub %%xmm0, %%xmm6\n"     // Compare lines vertically
+
+        "movdqu (%%rsi), %%xmm0\n"  // Line 1
+        "pminub %%xmm1, %%xmm0\n"
+        "pminub %%xmm2, %%xmm0\n"     // Compare lines vertically
+        "movdqu %%xmm0, %%xmm5\n"
+        "movdqu %%xmm0, %%xmm7\n"     // Copy the result
+        "psrldq $1, %%xmm5\n"
+        "psrldq $2, %%xmm7\n"         // Shift the register
+        "pmaxub %%xmm7, %%xmm5\n"
+        "pmaxub %%xmm0, %%xmm5\n"     // Compare lines vertically
+
+        "psubb %%xmm5, %%xmm6\n"     // Substract the min to the max
+        "movdqu %%xmm6, (%%rdi)\n"    // Result in rdi register
+        "add $14, %%rdi\n"
+        "add $14, %%rsi\n"
+        "sub $1, %%rcx\n"
+        "jnz l1\n"
+        : [dst]"=m" (dst)     // outputs
+        : [src]"g" (src), [i]"g" (i)// inputs
+        : "rsi", "rcx", "rdi", "xmm0", "xmm1", "xmm2", "xmm5", "xmm6", "xmm7"  // clobbers
+        );
 }
 
 int main()
