@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 #define W 1024
 #define H 1024
@@ -10,13 +11,11 @@ void c_bw(unsigned char *src, unsigned char *dst)
 {
     float dt;
     time_t start_time = clock();
+    int i;
 
-    for (int i=0; i<H; i++)
+    for (i=0; i<H*W; i++)
     {
-        for (int j=0; j<W; j++)
-        {
-            dst[H*i+j] = (src[H*i+j] > TRESHOLD) ? 255 : 0;
-        }
+        dst[i] = (src[i] > TRESHOLD) ? 255 : 0;
     }
     dt = (clock()-start_time)/(float)(CLOCKS_PER_SEC);
     printf("Execution time in C : %f s\n", dt);
@@ -26,15 +25,29 @@ void simd_bw(unsigned char *src, unsigned char *dst)
 {
     float dt;
     time_t start_time = clock();
+    long i = 3;//W*H/16;
+    char treshold[16];
+    memset(treshold, TRESHOLD, 16*sizeof(char));
+    printf("%d", treshold[3]);
 
-    /*for (int i=0; i<H; i++)
-    {
-        for (int j=0; j<W; j++)
-        {
-            dst[H*i+j] = (src[H*i+j] > TRESHOLD) ? 255 : 0;
-        }
-    }*/
-
+    asm(
+        "mov %[src], %%rsi\n"
+        "mov %[i], %%rcx\n"
+        "mov %[dst], %%rdi\n"
+        "mov %[treshold], %%rax\n"
+        "movapd (%%rax), %%xmm7\n"
+        "l1:\n"
+        "movapd (%%rsi), %%xmm0\n"
+        "pcmpeqb %%xmm7, %%xmm0\n"
+        "movapd %%xmm0, (%%rdi)\n"
+        "add $16, %%rdi\n"
+        "add $16, %%rsi\n"
+        "sub $1, %%rcx\n"
+        "jnz l1\n"
+        : [dst]"=m" (dst)     // outputs
+        : [src]"g" (src), [i]"g" (i), [treshold]"g" (treshold)  // inputs
+        : "rsi", "rcx", "rdi", "rax", "xmm0", "xmm7"  // clobbers
+        );
 
     dt = (clock()-start_time)/(float)(CLOCKS_PER_SEC);
     printf("Execution time in SIMD : %f s\n", dt);
