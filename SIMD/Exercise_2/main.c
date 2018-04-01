@@ -13,9 +13,9 @@ void c_min_max(unsigned char *src, unsigned char *dst)
 {
     int i, j, k, l, min_buffer, max_buffer;
 
-    for (i=BORDER_SIZE; i<(W-BORDER_SIZE); i++)
+    for (i=BORDER_SIZE; i<(H-BORDER_SIZE); i++)
     {
-        for (j=BORDER_SIZE; j<(H-BORDER_SIZE);j++)
+        for (j=BORDER_SIZE; j<(W-BORDER_SIZE);j++)
         {
             min_buffer = 255;
             max_buffer = 0;
@@ -40,7 +40,7 @@ void c_min_max(unsigned char *src, unsigned char *dst)
 
 void simd_min_max(unsigned char *src, unsigned char *dst)
 {
-    long i = W*(H-2*BORDER_SIZE)/14;
+    long i = W*(H-2*BORDER_SIZE)/(16-2*BORDER_SIZE);
 
     asm(
         "mov %[src], %%rsi\n"

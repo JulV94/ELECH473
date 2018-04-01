@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1522579395 source:/home/julien/git/ELECH473/SIMD/Exercise_3/main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<string.h>
+	<pthread.h>
+
