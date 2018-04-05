@@ -147,7 +147,7 @@ void* thread_simd_min_max(void *args)
     pthread_exit(NULL);
 }
 
-void apply_filter(void (*c_filter)(void*), void (*simd_filter)(void*), char c_filename[25], char simd_filename[25])
+void apply_filter(void* (*c_filter)(void*), void* (*simd_filter)(void*), char c_filename[25], char simd_filename[25])
 {
     unsigned char *src, *dst_c, *dst_simd;
     float dt_c, dt_simd;
