@@ -130,8 +130,8 @@ void* thread_simd_min_max(void *args)
         "movdqu %%xmm0, %%xmm7\n"     // Copy the result
         "psrldq $1, %%xmm5\n"
         "psrldq $2, %%xmm7\n"         // Shift the register
-        "pmaxub %%xmm7, %%xmm5\n"
-        "pmaxub %%xmm0, %%xmm5\n"     // Compare lines vertically
+        "pminub %%xmm7, %%xmm5\n"
+        "pminub %%xmm0, %%xmm5\n"     // Compare lines vertically
 
         "psubb %%xmm5, %%xmm6\n"     // Substract the min to the max
         "movdqu %%xmm6, (%%rdi)\n"    // Result in rdi register
