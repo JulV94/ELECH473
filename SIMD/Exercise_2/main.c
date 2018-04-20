@@ -192,23 +192,18 @@ void simd_min_max_7(unsigned char *src, unsigned char *dst)
         "movdqu 1024(%%rsi), %%xmm1\n"  // Line 2
         "movdqu 2048(%%rsi), %%xmm2\n"  // Line 3
         "movdqu 3072(%%rsi), %%xmm3\n"  // Line 4
-        "movdqu 4096(%%rsi), %%xmm4\n"  // Line 5
         "pminub %%xmm1, %%xmm5\n"
         "pminub %%xmm2, %%xmm5\n"
-        "pminub %%xmm3, %%xmm5\n"
-        "pminub %%xmm4, %%xmm5\n"     // Compare lines vertically
+        "pminub %%xmm3, %%xmm5\n"     // Compare lines vertically
         "movdqu %%xmm5, %%xmm1\n"
         "movdqu %%xmm5, %%xmm2\n"
-        "movdqu %%xmm5, %%xmm3\n"
-        "movdqu %%xmm5, %%xmm4\n"     // Copy the result
+        "movdqu %%xmm5, %%xmm3\n"     // Copy the result
         "psrldq $1, %%xmm1\n"
         "psrldq $2, %%xmm2\n"
-        "psrldq $3, %%xmm3\n"
-        "psrldq $4, %%xmm4\n"         // Shift the register
+        "psrldq $3, %%xmm3\n"         // Shift the register
         "pminub %%xmm1, %%xmm5\n"
         "pminub %%xmm2, %%xmm5\n"
-        "pminub %%xmm3, %%xmm5\n"
-        "pminub %%xmm4, %%xmm5\n"     // Compare lines vertically
+        "pminub %%xmm3, %%xmm5\n"     // Compare lines vertically
 
         "movdqu 4096(%%rsi), %%xmm1\n"  // Line 5
         "movdqu 5120(%%rsi), %%xmm2\n"  // Line 6
@@ -235,7 +230,7 @@ void simd_min_max_7(unsigned char *src, unsigned char *dst)
         "jnz l3\n"
         : [dst]"=m" (dst)     // outputs
         : [src]"g" (src), [i]"g" (i)// inputs
-        : "rsi", "rcx", "rdi", "xmm0", "xmm1", "xmm2", "xmm3", "xmm4", "xmm5"  // clobbers
+        : "rsi", "rcx", "rdi", "xmm0", "xmm1", "xmm2", "xmm3", "xmm5"  // clobbers
         );
 }
 
