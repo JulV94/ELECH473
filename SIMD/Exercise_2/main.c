@@ -154,6 +154,7 @@ void simd_min_max_7(unsigned char *src, unsigned char *dst)
         "mov %[i], %%rcx\n"
         "mov %[dst], %%rdi\n"
         "l3:\n"
+        // MAX
         "movdqu (%%rsi), %%xmm0\n"  // Line 1
         "movdqu 1024(%%rsi), %%xmm1\n"  // Line 2
         "movdqu 2048(%%rsi), %%xmm2\n"  // Line 3
@@ -161,16 +162,9 @@ void simd_min_max_7(unsigned char *src, unsigned char *dst)
         "pmaxub %%xmm1, %%xmm0\n"
         "pmaxub %%xmm2, %%xmm0\n"
         "pmaxub %%xmm3, %%xmm0\n"     // Compare lines vertically
-        "movdqu %%xmm0, %%xmm1\n"
-        "movdqu %%xmm0, %%xmm2\n"
-        "movdqu %%xmm0, %%xmm3\n"     // Copy the result
-        "psrldq $1, %%xmm1\n"
-        "psrldq $2, %%xmm2\n"
-        "psrldq $3, %%xmm3\n"         // Shift the register
-        "pmaxub %%xmm1, %%xmm0\n"
-        "pmaxub %%xmm2, %%xmm0\n"
-        "pmaxub %%xmm3, %%xmm0\n"     // Compare lines vertically
+        "movdqu %%xmm0, %%xmm6\n"   //backup
 
+        // Next three lines
         "movdqu 4096(%%rsi), %%xmm1\n"  // Line 5
         "movdqu 5120(%%rsi), %%xmm2\n"  // Line 6
         "movdqu 6144(%%rsi), %%xmm3\n"  // Line 7
@@ -180,6 +174,8 @@ void simd_min_max_7(unsigned char *src, unsigned char *dst)
         "movdqu %%xmm0, %%xmm1\n"
         "movdqu %%xmm0, %%xmm2\n"
         "movdqu %%xmm0, %%xmm3\n"     // Copy the result
+
+        // Shift and compare again
         "psrldq $4, %%xmm1\n"
         "psrldq $5, %%xmm2\n"
         "psrldq $6, %%xmm3\n"         // Shift the register
@@ -187,7 +183,18 @@ void simd_min_max_7(unsigned char *src, unsigned char *dst)
         "pmaxub %%xmm2, %%xmm0\n"
         "pmaxub %%xmm3, %%xmm0\n"     // Compare lines vertically
 
+        // Back to the four first lines
+        "movdqu %%xmm6, %%xmm1\n"
+        "movdqu %%xmm6, %%xmm2\n"
+        "movdqu %%xmm6, %%xmm3\n"
+        "psrldq $1, %%xmm1\n"
+        "psrldq $2, %%xmm2\n"
+        "psrldq $3, %%xmm3\n"         // Shift the register
+        "pmaxub %%xmm1, %%xmm0\n"
+        "pmaxub %%xmm2, %%xmm0\n"
+        "pmaxub %%xmm3, %%xmm0\n"     // Compare lines vertically
 
+        // MIN
         "movdqu (%%rsi), %%xmm5\n"  // Line 1
         "movdqu 1024(%%rsi), %%xmm1\n"  // Line 2
         "movdqu 2048(%%rsi), %%xmm2\n"  // Line 3
@@ -195,16 +202,9 @@ void simd_min_max_7(unsigned char *src, unsigned char *dst)
         "pminub %%xmm1, %%xmm5\n"
         "pminub %%xmm2, %%xmm5\n"
         "pminub %%xmm3, %%xmm5\n"     // Compare lines vertically
-        "movdqu %%xmm5, %%xmm1\n"
-        "movdqu %%xmm5, %%xmm2\n"
-        "movdqu %%xmm5, %%xmm3\n"     // Copy the result
-        "psrldq $1, %%xmm1\n"
-        "psrldq $2, %%xmm2\n"
-        "psrldq $3, %%xmm3\n"         // Shift the register
-        "pminub %%xmm1, %%xmm5\n"
-        "pminub %%xmm2, %%xmm5\n"
-        "pminub %%xmm3, %%xmm5\n"     // Compare lines vertically
+        "movdqu %%xmm5, %%xmm6\n"   //backup
 
+        // Next three lines
         "movdqu 4096(%%rsi), %%xmm1\n"  // Line 5
         "movdqu 5120(%%rsi), %%xmm2\n"  // Line 6
         "movdqu 6144(%%rsi), %%xmm3\n"  // Line 7
@@ -214,6 +214,8 @@ void simd_min_max_7(unsigned char *src, unsigned char *dst)
         "movdqu %%xmm5, %%xmm1\n"
         "movdqu %%xmm5, %%xmm2\n"
         "movdqu %%xmm5, %%xmm3\n"     // Copy the result
+
+        // Shift and compare again
         "psrldq $4, %%xmm1\n"
         "psrldq $5, %%xmm2\n"
         "psrldq $6, %%xmm3\n"         // Shift the register
@@ -221,6 +223,16 @@ void simd_min_max_7(unsigned char *src, unsigned char *dst)
         "pminub %%xmm2, %%xmm5\n"
         "pminub %%xmm3, %%xmm5\n"     // Compare lines vertically
 
+        // Back to the four first lines
+        "movdqu %%xmm6, %%xmm1\n"
+        "movdqu %%xmm6, %%xmm2\n"
+        "movdqu %%xmm6, %%xmm3\n"
+        "psrldq $1, %%xmm1\n"
+        "psrldq $2, %%xmm2\n"
+        "psrldq $3, %%xmm3\n"         // Shift the register
+        "pminub %%xmm1, %%xmm5\n"
+        "pminub %%xmm2, %%xmm5\n"
+        "pminub %%xmm3, %%xmm5\n"     // Compare lines vertically
 
         "psubb %%xmm5, %%xmm0\n"     // Substract the min to the max
         "movdqu %%xmm0, (%%rdi)\n"    // Result in rdi register
